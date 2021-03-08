@@ -11,6 +11,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.pt.Dado;
@@ -23,6 +24,8 @@ public class CriaContaSteps {
     private static WebDriverWait wait;
     private String nomeGeral;
     private String sobreNomeGeral;
+    private String emailGeral;
+    private String senhaGeral;
 
     @Before
     public static void WebDriverChrome(){
@@ -41,15 +44,18 @@ public class CriaContaSteps {
 
     @Quando("^preenche os campos nome (.*), sobrenome (.*), e-mail (.*), senha (.*)$")
     public void preencheOsCamposNomeSobrenomeEMailSenha(String nome, String sobNome, String email, String senha) throws Throwable {
+        Random random = new Random();
         nomeGeral = nome;
         sobreNomeGeral = sobNome;
-        
-        Random random = new Random();
+        emailGeral = email + random.nextInt(1000);
+        senhaGeral = senha;
+ 
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!TESTE:  "+emailGeral);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("FirstName")));
         driver.findElement(By.id("FirstName")).sendKeys(nomeGeral);
         driver.findElement(By.id("LastName")).sendKeys(sobreNomeGeral);
-        driver.findElement(By.id("CreateAccountEmailAddress")).sendKeys(random.nextInt(100)+email);
-        driver.findElement(By.id("NewPassword")).sendKeys(senha);
+        driver.findElement(By.id("CreateAccountEmailAddress")).sendKeys(emailGeral);
+        driver.findElement(By.id("NewPassword")).sendKeys(senhaGeral);
     }
 
     @Quando("^clica em salvar$")
@@ -66,8 +72,28 @@ public class CriaContaSteps {
 
     @Então("^a conta deve ser notificado que a senha é invalida$")
     public void aContaDeveSerNotificadoQueASenhaÉInvalida() throws Throwable {
-        assertEquals("Crie uma nova senha de acordo com os critérios para criação de senhas .", driver.findElement(By.
+        assertEquals("Crie uma nova senha de acordo com os critérios para criação de senhas.", driver.findElement(By.
         xpath("/html/body/div[1]/div[3]/div[3]/div/div[2]/div[2]/div/div/form/div/div[1]/div[2]")).getText());
+    }
+
+    @Dado("^que o usuario está na tela de login$")
+    public void queOUsuarioEstáNaTelaDeLogin() throws Throwable {
+        driver.get("https://www.dell.com/");
+        driver.findElement(By.className("mh-tw-sign-in-wrap")).click();
+        driver.findElement(By.linkText("Login")).click();
+    }
+
+    @Quando("^preenche as informações requeridas de e-mail a(\\d+)a(\\d+)@dn\\.vd, e senha hdu>;dgt(\\d+)Q$")
+    public void preencheAsInformaçõesRequeridasDeEMailAADnVdESenhaHduDgtQ(int email, int senha, int arg3) throws Throwable {
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!TESTE:  "+emailGeral);
+        driver.findElement(By.id("EmailAddress")).sendKeys(emailGeral);
+        driver.findElement(By.id("Password")).sendKeys(senhaGeral);
+    }
+
+    @Então("^a conta deve ser acessada com sucesso$")
+    public void aContaDeveSerAcessadaComSucesso() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
     }
 
     @After

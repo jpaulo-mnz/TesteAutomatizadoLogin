@@ -9,7 +9,7 @@ import cucumber.api.junit.Cucumber;
 @RunWith(Cucumber.class)
 @CucumberOptions(
         features = "src/test/features",
-        //tags = "@essa",
+        tags = "@essa",
         glue = "steps",
         plugin = "pretty",
         monochrome = true,
